@@ -7,4 +7,4 @@ fisher_toolkit.py: CVB formula implementation. Called from pipeline.py. (Note: '
 
 pipeline_utils.py: helper functions, called by pipeline.py and fisher_toolkit.py.
 
-All files contain extensive comments and doc strings
+All files contain extensive comments and doc strings - see the files themselves for further documentation. 
