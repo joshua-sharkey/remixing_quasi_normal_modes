@@ -31,7 +31,6 @@ from lalsimulation import SimInspiralTransformPrecessingWvf2PE as lal_to_bilby_s
 """
 
 # write dict to .json called f_name, in dir
-# TESTED
 def write_dict_to_json(dir, f_name, dict):
 
     os.makedirs(dir, exist_ok=True)
@@ -40,7 +39,6 @@ def write_dict_to_json(dir, f_name, dict):
         
 
 # reads contents of f_name in dir into .json file
-# TESTED
 def read_dict_from_json(dir, f_name):
     
     if not os.path.exists(os.path.join(dir, f_name)):
@@ -65,7 +63,6 @@ nb: assumes bilby-style injection_parameters
 #   * detecor_frame: True/False, flag for conversion to detector frame or not
 # OUTPUTS:
 #   * M, a: remant mass M (solar masses) and spin a (dimensionless)
-# TESTED
 def get_surfinBH_remnant_M_a(theta, fit, detector_frame=True, f_ref = 20.0):
     
     # transofmr variables to surfinBH format
@@ -98,7 +95,6 @@ def get_surfinBH_remnant_M_a(theta, fit, detector_frame=True, f_ref = 20.0):
 #   * l, m, n = qnm indicies 
 # OUTPUTS:
 #   f, tau = qnm frequency and damping time
-# TESTED
 # NOTE: f in Hz, not rad/s
 def get_pyRing_qnm_fit(M, a, l=2, m=2, n=0):
     
@@ -115,7 +111,6 @@ def get_pyRing_qnm_fit(M, a, l=2, m=2, n=0):
 #   * l,m,n = qnm indicies 
 # OUTPUTS:
 #   * qnm frequency & damping time: f, tau
-# TESTED
 def get_pyRing_qnm_fit_via_surfinBH(theta, fit, l=2, m=2, n=0, detector_frame=True):
 
     M, a = get_surfinBH_remnant_M_a(theta, fit, detector_frame)
@@ -149,7 +144,6 @@ def get_pyRing_teob_remnant_and_220_qnm(theta, teob_convention = False):
 # convetr mass in solar masses to seconds
 # INPUTS: M_sol
 # OUTPUTS: converted from solar masses >>> seconds
-# TESTED
 def convert_to_s(M_sol):
     return M_sol * M_sun_s
 
@@ -188,10 +182,10 @@ def get_peak_strain(wf_gen, theta):
 """
 parameter conversion functions
 
-'Do not traverse that barran land scape,
+'Do not traverse that barren land scape,
 Do not look back and dwell,
 For only pain and suffering can be found there'
- - JS, 2025, after spending many an houre exaperated by parameter conversions
+ - JS, 2025, after spending many an hours exasperated by parameter conversions
 """
 
 # convert spins from bilby to lal sim Cartesian 
