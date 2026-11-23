@@ -18,12 +18,12 @@ import gwpy.timeseries as gts
 import matplotlib.pyplot as plt
 from pyRing.waveform  import TEOBPM
 
-sys.path.append("/data/wiay/postgrads/3031499s/physics_research/pyRing/calibration_injection_study/Pipeline")
+sys.path.append("/path/to/pipeline")
 import pipeline_utils as ut
 import qnm_fisher_toolkit as qnm_ftk
 
 # environ variable for lal 
-os.environ['LAL_DATA_PATH'] = "/home/3031499s/src/lalsuite/waveform_data__copy_from_CIT"
+os.environ['LAL_DATA_PATH'] = "/path/to/LAL_DATA_PATH"
 
 # this is the way
 bilby.core.utils.random.seed(42)
@@ -867,11 +867,6 @@ def run_qnm_fisher_systematic_offset_calculation(output_location, theta_path, th
                         "phase_33":0.0,
                         "phase_44":0.0,
                         "phase_55":0.0,
-                        #"phase_31":0.0,
-                        #"phase_32":0.0,
-                        #"phase_41":0.0,
-                        #"phase_42":0.0,
-                        #"phase_43":0.0,
                         }
 
     else:
@@ -1228,76 +1223,9 @@ def qnm_shift_from_ansatz(output_location, theta_path, theta_name, ifo_names, ps
     
     ut.write_dict_to_json(output_location, "initial_values.json", initial_values)
     ut.write_dict_to_json(output_location, "predicted_offset.json", predicted_offset)
-
-
-
-    """
-    # ML calc does not currently work, pending investigation
-
-    ##########################
-    # ML CALC -- 4 VARIABLES #
-    ##########################
-
-    k = qnm.amp * np.exp(1.0j * qnm.phase) / ( (1/qnm.damp)**2 + (2 * np.pi * (qnm.freq - f))**2)
-    l = (1/qnm.damp) + (2.0j * np.pi * (qnm.freq - f))
-    kl = k * l
-
-    d = h_f * alpha 
-
-    def prod(a,b):
-        return bilby.gw.utils.noise_weighted_inner_product(a,b,ifo_dn_c.power_spectral_density_array, ifo_dn_c.strain_data.duration)
-        
-
-    mat = np.zeros((4, 4), dtype=complex) # phi, amp, freq, damp
     
-    # phi
-    mat[0][0] = 2.0j * prod(kl,kl)
-    mat[0][1] = 0.0
-    mat[0][2] = 1.0j * (prod(kl,k) + prod(k,kl))
-    mat[0][3] = prod(kl,k) - prod(k,kl)
 
-    # amp
-    mat[1][0] = 0.0
-    mat[1][1] = 2.0 * prod(kl,kl)
-    mat[1][2] = 1.0j * (prod(kl,k) - prod(k,kl))
-    mat[1][3] = prod(kl,k) + prod(k,kl)
 
-    # freq
-    mat[2][0] = -1.0j * (prod(kl,k) + prod(k,kl))
-    mat[2][1] = prod(kl,k) - prod(k,kl) 
-    mat[2][2] = -2.0j * prod(k,k)
-    mat[2][3] = 0.0
-
-    # damp
-    mat[3][0] = 1.0j * (prod(k,kl) - prod(kl,k))
-    mat[3][1] = prod(kl,k) + prod(k,kl)
-    mat[3][2] = 0.0
-    mat[3][3] = 2.0 * prod(k,k)
-
-    vec = np.zeros(4, dtype=complex)
-
-    vec[0] = prod(kl,d) - prod(d,kl)
-    vec[1] = prod(d, kl) + prod(kl,d) - (2.0*prod(kl,kl))
-    vec[2] = prod(d,k) - prod(k,d) - prod(kl,k) + prod(k,kl)
-    vec[3] = prod(d,k) + prod(k,d) - prod(kl,k) - prod(k,kl)
-
-    mat_inv = np.linalg.inv(mat)
-
-    del_vec = mat_inv @ vec
-
-    del_freq = del_vec[2]/(2 * np.pi)
-    del_damp = del_vec[3] * ((qnm.damp)**(2))
-
-    ml_offset = {"freq_re": np.real(del_freq),
-                 "freq_im": np.imag(del_freq),
-                 "damp_re": np.real(del_damp),
-                 "damp_im": np.imag(del_damp)}
-    
-    ut.write_dict_to_json(output_location, "ml_offset.json", ml_offset)
-    """
-    
-    
-    
 # numerically integrate "anstatz" for QNM shift 
 # INPUTS:
 #   * output_location: dir for outputs
